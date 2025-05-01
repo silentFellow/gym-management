@@ -11,7 +11,7 @@ const login = async ({
     const response = await API.post('/users/login', { username, password })
 
     if (response.status === 200) {
-      return response.data
+      return response
     } else {
       throw new Error('Failed to login')
     }
@@ -46,7 +46,7 @@ const signin = async ({
       )
     }
 
-    return createUserResponse.data
+    return createUserResponse
   } catch (error: any) {
     console.error('Signin error:', error.message || error)
     throw error
