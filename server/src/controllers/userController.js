@@ -41,7 +41,7 @@ export const loginUser = async (req, res) => {
       const refreshToken = generateRefreshToken(user._id);
 
       res.status(200).json({
-        _id: user._id,
+        id: user._id,
         username: user.username,
         role: user.role,
         access_token: accessToken,
@@ -71,5 +71,72 @@ export const refreshAccessToken = (req, res) => {
     });
   } catch (err) {
     res.status(403).json({ message: "Invalid or expired refresh token" });
+  }
+};
+
+// Get all users
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().lean();
+
+    // Map through the results to rename _id to id
+    const modifiedUsers = users.map((user) => ({
+      ...user,
+      id: user._id.toString(), // Convert ObjectId to string
+      _id: undefined,
+    }));
+
+    res.status(200).json(modifiedUsers);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching users", error: error.message });
+  }
+};
+
+// Remove a user
+export const removeUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findByIdAndDelete(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User removed successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error removing user", error: error.message });
+  }
+};
+
+// Update user role
+export const updateUserRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+    const validRoles = ["member", "trainer", "admin"];
+
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({ message: "Invalid role" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { role },
+      { new: true },
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User role updated", user: updatedUser });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error updating role", error: error.message });
   }
 };

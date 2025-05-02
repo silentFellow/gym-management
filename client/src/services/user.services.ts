@@ -1,61 +1,26 @@
 import API from '@/api'
 
-const login = async ({
-  username,
-  password,
-}: {
+export interface User {
+  id: string
   username: string
-  password: string
-}): Promise<any> => {
-  try {
-    const response = await API.post('/users/login', { username, password })
-
-    if (response.status === 200) {
-      return response
-    } else {
-      throw new Error('Failed to login')
-    }
-  } catch (error: any) {
-    console.error('Login error:', error.message || error)
-    throw error
-  }
+  role: 'member' | 'trainer' | 'admin'
 }
 
-const signin = async ({
-  username,
-  password,
-  confirmPassword,
+export const getAllUsers = async (): Promise<Array<User>> => {
+  const response = await API.get('/users')
+  return response.data
+}
+
+export const removeUser = async (id: string): Promise<void> => {
+  await API.delete(`/users/${id}`)
+}
+
+export const updateUserRole = async ({
+  id,
+  role,
 }: {
-  username: string
-  password: string
-  confirmPassword: string
-}): Promise<any> => {
-  try {
-    if (password !== confirmPassword) {
-      throw new Error("Passwords don't match")
-    }
-
-    const createUserResponse = await API.post('/users/create', {
-      username,
-      password,
-    })
-
-    if (createUserResponse.status !== 200) {
-      throw new Error(
-        createUserResponse.data.message || 'Failed to create user',
-      )
-    }
-
-    return createUserResponse
-  } catch (error: any) {
-    console.error('Signin error:', error.message || error)
-    throw error
-  }
+  id: string
+  role: 'member' | 'trainer' | 'admin'
+}): Promise<void> => {
+  await API.put(`/users/${id}`, { role })
 }
-
-const signout = () => {
-  localStorage.clear()
-  console.log('User has been signed out')
-}
-
-export { login, signin, signout }
