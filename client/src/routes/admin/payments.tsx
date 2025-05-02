@@ -5,11 +5,19 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { extendMembership, getPayments } from '@/services/payment.services'
 
 const AdminPayments = () => {
   const queryClient = useQueryClient()
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedDuration, setSelectedDuration] = useState<string>('1') // Default to 1 month
 
   const { data: payments = [], isLoading } = useQuery({
     queryKey: ['payments'],
@@ -31,6 +39,10 @@ const AdminPayments = () => {
       user.username.toLowerCase().includes(searchTerm.toLowerCase()),
     )
 
+  const handleExtendMembership = (userId: string) => {
+    mutation.mutate({ userId, duration: selectedDuration })
+  }
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold mb-4">Payments & Validity</h1>
@@ -44,6 +56,8 @@ const AdminPayments = () => {
 
       {isLoading ? (
         <Skeleton className="h-24 w-full" />
+      ) : filteredPayments.length === 0 ? (
+        <p>No payments found.</p>
       ) : (
         <table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden text-sm">
           <thead>
@@ -66,10 +80,24 @@ const AdminPayments = () => {
                     ? new Date(user.membershipExpiresAt).toLocaleDateString()
                     : 'N/A'}
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-3 px-4 flex items-center space-x-2">
+                  <Select
+                    value={selectedDuration}
+                    onValueChange={setSelectedDuration}
+                    className="max-w-xs"
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select duration" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1 Month</SelectItem>
+                      <SelectItem value="6">6 Months</SelectItem>
+                      <SelectItem value="12">1 Year</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <Button
                     size="sm"
-                    onClick={() => mutation.mutate(user._id)}
+                    onClick={() => handleExtendMembership(user._id)}
                     disabled={mutation.isLoading}
                   >
                     Extend Validity

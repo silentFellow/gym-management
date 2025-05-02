@@ -5,7 +5,16 @@ export const getPayments = async () => {
   return res.data
 }
 
-export const extendMembership = async (userId: string) => {
-  const res = await API.post(`/payments/extend/${userId}`)
-  return res.data
+export const extendMembership = async ({
+  userId,
+  duration,
+}: {
+  userId: string
+  duration: string
+}) => {
+  const response = await API.post('/payments/extend-membership', {
+    userId,
+    duration,
+  })
+  return response.data
 }

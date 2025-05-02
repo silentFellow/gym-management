@@ -9,26 +9,32 @@ export const getAllPayments = async (req, res) => {
   }
 };
 
-export const extendMembershipValidity = async (req, res) => {
-  const { userId } = req.params;
+export const extendMembership = async (req, res) => {
+  const { userId, duration } = req.body
+
   try {
-    const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ error: "User not found" });
+    // Find the user in the database
+    const user = await User.findById(userId)
 
-    const today = new Date();
-    user.membershipExpiresAt =
-      user.membershipExpiresAt && user.membershipExpiresAt > today
-        ? new Date(
-            user.membershipExpiresAt.setMonth(
-              user.membershipExpiresAt.getMonth() + 1,
-            ),
-          )
-        : new Date(today.setMonth(today.getMonth() + 1));
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
 
-    user.hasPaid = true;
-    await user.save();
-    res.json({ message: "Membership extended", user });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to extend membership" });
+    // Get current membership expiry or set to now if not set
+    const currentExpiry = user.membershipExpiresAt
+      ? new Date(user.membershipExpiresAt)
+      : new Date()
+
+    // Add the duration to the current expiry
+    const newExpiry = new Date(currentExpiry)
+    newExpiry.setMonth(newExpiry.getMonth() + parseInt(duration)) // Add months
+
+    // Update the user with the new expiry date
+    user.membershipExpiresAt = newExpiry
+    await user.save()
+
+    return res.status(200).json({ message: 'Membership extended successfully' })
+  } catch (error) {
+    return res.status(500).json({ message: 'Failed to extend membership', error })
   }
-};
+}

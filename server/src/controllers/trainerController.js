@@ -3,7 +3,6 @@ import User from "../models/user.js";
 export const getAllTrainers = async (req, res) => {
   try {
     const trainers = await User.find({ role: "trainer" });
-    console.log(trainers);
     res.status(200).json(trainers);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch trainers" });
