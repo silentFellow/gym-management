@@ -125,7 +125,7 @@ export const updateUserRole = async (req, res) => {
 
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { role },
+      { role, isTrainer: role === "trainer" },
       { new: true },
     );
 
@@ -139,4 +139,13 @@ export const updateUserRole = async (req, res) => {
       .status(500)
       .json({ message: "Error updating role", error: error.message });
   }
+};
+
+export const getEligibleUsers = async (req, res) => {
+  const today = new Date();
+  const users = await User.find({
+    role: "member",
+    membershipExpiresAt: { $gt: today },
+  }).select("_id username role membershipExpiresAt");
+  res.json(users);
 };

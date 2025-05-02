@@ -6,7 +6,7 @@ const AdminLayout = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    navigate({ to: '/admin/users' }) // This will navigate to /admin/users
+    navigate({ to: '/admin/users' })
   }, [navigate])
 
   return (

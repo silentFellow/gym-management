@@ -6,11 +6,13 @@ import {
   getAllUsers,
   removeUser,
   updateUserRole,
+  getEligibleUsers
 } from "../controllers/userController.js";
 
 const router = express.Router();
 
 router.get("/", getAllUsers);
+router.get("/eligible-members", getEligibleUsers);
 router.post("/create", registerUser);
 router.post("/login", loginUser);
 router.post("/refresh", refreshAccessToken);
