@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   trainees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  hasPaid: { type: Boolean, default: false },
 });
 
 // Encrypt password before save

@@ -91,13 +91,6 @@ const AdminTrainers = () => {
                     Trainees: {trainer.trainees?.length || 0}
                   </p>
                 </div>
-                {trainer.trainees?.length > 0 && (
-                  <ul className="text-sm list-disc list-inside pl-1 text-muted-foreground">
-                    {trainer.trainees.map((trainee) => (
-                      <li key={trainee._id}>{trainee.username}</li>
-                    ))}
-                  </ul>
-                )}
                 <Button onClick={() => openAssignDialog(trainer._id)}>
                   Assign Member
                 </Button>
