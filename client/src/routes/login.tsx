@@ -25,6 +25,7 @@ const LoginRoute = () => {
         localStorage.setItem('user_id', res.data.id)
         localStorage.setItem('access_token', res.data.access_token)
         localStorage.setItem('refresh_token', res.data.refresh_token)
+        localStorage.setItem('role', res.data.role)
 
         toast.success('Logged in successfully')
         navigate({ to: `/${res.data.role}` })

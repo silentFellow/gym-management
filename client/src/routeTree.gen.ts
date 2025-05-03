@@ -11,16 +11,24 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TrainerImport } from './routes/trainer'
 import { Route as SignupImport } from './routes/signup'
 import { Route as LoginImport } from './routes/login'
 import { Route as AdminImport } from './routes/admin'
 import { Route as IndexImport } from './routes/index'
+import { Route as TrainerTraineesImport } from './routes/trainer/trainees'
 import { Route as AdminUsersImport } from './routes/admin/users'
 import { Route as AdminTrainersImport } from './routes/admin/trainers'
 import { Route as AdminPaymentsImport } from './routes/admin/payments'
 import { Route as AdminAttendanceImport } from './routes/admin/attendance'
 
 // Create/Update Routes
+
+const TrainerRoute = TrainerImport.update({
+  id: '/trainer',
+  path: '/trainer',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const SignupRoute = SignupImport.update({
   id: '/signup',
@@ -44,6 +52,12 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const TrainerTraineesRoute = TrainerTraineesImport.update({
+  id: '/trainees',
+  path: '/trainees',
+  getParentRoute: () => TrainerRoute,
 } as any)
 
 const AdminUsersRoute = AdminUsersImport.update({
@@ -102,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
+    '/trainer': {
+      id: '/trainer'
+      path: '/trainer'
+      fullPath: '/trainer'
+      preLoaderRoute: typeof TrainerImport
+      parentRoute: typeof rootRoute
+    }
     '/admin/attendance': {
       id: '/admin/attendance'
       path: '/attendance'
@@ -130,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersImport
       parentRoute: typeof AdminImport
     }
+    '/trainer/trainees': {
+      id: '/trainer/trainees'
+      path: '/trainees'
+      fullPath: '/trainer/trainees'
+      preLoaderRoute: typeof TrainerTraineesImport
+      parentRoute: typeof TrainerImport
+    }
   }
 }
 
@@ -151,15 +179,28 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface TrainerRouteChildren {
+  TrainerTraineesRoute: typeof TrainerTraineesRoute
+}
+
+const TrainerRouteChildren: TrainerRouteChildren = {
+  TrainerTraineesRoute: TrainerTraineesRoute,
+}
+
+const TrainerRouteWithChildren =
+  TrainerRoute._addFileChildren(TrainerRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/trainer': typeof TrainerRouteWithChildren
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/trainers': typeof AdminTrainersRoute
   '/admin/users': typeof AdminUsersRoute
+  '/trainer/trainees': typeof TrainerTraineesRoute
 }
 
 export interface FileRoutesByTo {
@@ -167,10 +208,12 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/trainer': typeof TrainerRouteWithChildren
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/trainers': typeof AdminTrainersRoute
   '/admin/users': typeof AdminUsersRoute
+  '/trainer/trainees': typeof TrainerTraineesRoute
 }
 
 export interface FileRoutesById {
@@ -179,10 +222,12 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/trainer': typeof TrainerRouteWithChildren
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/trainers': typeof AdminTrainersRoute
   '/admin/users': typeof AdminUsersRoute
+  '/trainer/trainees': typeof TrainerTraineesRoute
 }
 
 export interface FileRouteTypes {
@@ -192,30 +237,36 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/signup'
+    | '/trainer'
     | '/admin/attendance'
     | '/admin/payments'
     | '/admin/trainers'
     | '/admin/users'
+    | '/trainer/trainees'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/login'
     | '/signup'
+    | '/trainer'
     | '/admin/attendance'
     | '/admin/payments'
     | '/admin/trainers'
     | '/admin/users'
+    | '/trainer/trainees'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/login'
     | '/signup'
+    | '/trainer'
     | '/admin/attendance'
     | '/admin/payments'
     | '/admin/trainers'
     | '/admin/users'
+    | '/trainer/trainees'
   fileRoutesById: FileRoutesById
 }
 
@@ -224,6 +275,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
+  TrainerRoute: typeof TrainerRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -231,6 +283,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
+  TrainerRoute: TrainerRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -246,7 +299,8 @@ export const routeTree = rootRoute
         "/",
         "/admin",
         "/login",
-        "/signup"
+        "/signup",
+        "/trainer"
       ]
     },
     "/": {
@@ -267,6 +321,12 @@ export const routeTree = rootRoute
     "/signup": {
       "filePath": "signup.tsx"
     },
+    "/trainer": {
+      "filePath": "trainer.tsx",
+      "children": [
+        "/trainer/trainees"
+      ]
+    },
     "/admin/attendance": {
       "filePath": "admin/attendance.tsx",
       "parent": "/admin"
@@ -282,6 +342,10 @@ export const routeTree = rootRoute
     "/admin/users": {
       "filePath": "admin/users.tsx",
       "parent": "/admin"
+    },
+    "/trainer/trainees": {
+      "filePath": "trainer/trainees.tsx",
+      "parent": "/trainer"
     }
   }
 }

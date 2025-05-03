@@ -48,3 +48,42 @@ export const assignTraineeToTrainer = async (req, res) => {
     res.status(500).json({ error: "Assignment failed" });
   }
 };
+
+export const getTraineesForTrainer = async (req, res) => {
+  try {
+    const trainerId = req.query.trainerId;
+
+    if (!trainerId) {
+      return res.status(400).json({ error: "Trainer ID is required" });
+    }
+
+    const trainer = await User.findById(trainerId).populate('trainees');
+
+    if (!trainer || trainer.role !== "trainer") {
+      return res.status(403).json({ error: "Unauthorized or invalid trainer" });
+    }
+
+    const trainees = trainer.trainees.map((trainee) => {
+      // Calculate attendance percentage for each trainee
+      const totalAttendance = trainee.attendance?.length || 0;
+      const presentAttendance = trainee.attendance?.filter(
+        (a) => a.status === "Present"
+      ).length || 0;
+
+      const attendancePercentage = totalAttendance === 0
+        ? 0
+        : Math.round((presentAttendance / totalAttendance) * 100);
+
+      return {
+        id: trainee._id,
+        username: trainee.username,
+        attendancePercentage,
+        attendance: trainee.attendance,
+      };
+    });
+
+    res.status(200).json(trainees);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch trainees" });
+  }
+};

@@ -25,3 +25,9 @@ export const assignTraineeToTrainer = async ({
   })
   return res.data
 }
+
+// Fetch trainees assigned to a trainer, including their attendance data
+export const fetchTraineesForTrainer = async (trainerId: string) => {
+  const response = await API.get(`/trainers/trainees?trainerId=${trainerId}`)
+  return response.data
+}

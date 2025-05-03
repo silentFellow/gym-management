@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
   },
   trainees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   hasPaid: { type: Boolean, default: false },
+  attendance: [
+    {
+      date: { type: Date, required: true },
+      status: { type: String, enum: ["Present", "Absent"], required: true },
+    },
+  ],
 });
 
 // Encrypt password before save
