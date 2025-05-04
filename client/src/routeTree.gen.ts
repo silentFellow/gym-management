@@ -19,6 +19,7 @@ import { Route as AdminImport } from './routes/admin'
 import { Route as IndexImport } from './routes/index'
 import { Route as TrainerTraineesImport } from './routes/trainer/trainees'
 import { Route as TrainerAssignWorkImport } from './routes/trainer/assign-work'
+import { Route as MemberPaymentsImport } from './routes/member/payments'
 import { Route as MemberDashboardImport } from './routes/member/dashboard'
 import { Route as MemberAssignedWorkoutsImport } from './routes/member/assigned-workouts'
 import { Route as AdminUsersImport } from './routes/admin/users'
@@ -74,6 +75,12 @@ const TrainerAssignWorkRoute = TrainerAssignWorkImport.update({
   id: '/assign-work',
   path: '/assign-work',
   getParentRoute: () => TrainerRoute,
+} as any)
+
+const MemberPaymentsRoute = MemberPaymentsImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => MemberRoute,
 } as any)
 
 const MemberDashboardRoute = MemberDashboardImport.update({
@@ -200,6 +207,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MemberDashboardImport
       parentRoute: typeof MemberImport
     }
+    '/member/payments': {
+      id: '/member/payments'
+      path: '/payments'
+      fullPath: '/member/payments'
+      preLoaderRoute: typeof MemberPaymentsImport
+      parentRoute: typeof MemberImport
+    }
     '/trainer/assign-work': {
       id: '/trainer/assign-work'
       path: '/assign-work'
@@ -238,11 +252,13 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 interface MemberRouteChildren {
   MemberAssignedWorkoutsRoute: typeof MemberAssignedWorkoutsRoute
   MemberDashboardRoute: typeof MemberDashboardRoute
+  MemberPaymentsRoute: typeof MemberPaymentsRoute
 }
 
 const MemberRouteChildren: MemberRouteChildren = {
   MemberAssignedWorkoutsRoute: MemberAssignedWorkoutsRoute,
   MemberDashboardRoute: MemberDashboardRoute,
+  MemberPaymentsRoute: MemberPaymentsRoute,
 }
 
 const MemberRouteWithChildren =
@@ -274,6 +290,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/member/assigned-workouts': typeof MemberAssignedWorkoutsRoute
   '/member/dashboard': typeof MemberDashboardRoute
+  '/member/payments': typeof MemberPaymentsRoute
   '/trainer/assign-work': typeof TrainerAssignWorkRoute
   '/trainer/trainees': typeof TrainerTraineesRoute
 }
@@ -291,6 +308,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/member/assigned-workouts': typeof MemberAssignedWorkoutsRoute
   '/member/dashboard': typeof MemberDashboardRoute
+  '/member/payments': typeof MemberPaymentsRoute
   '/trainer/assign-work': typeof TrainerAssignWorkRoute
   '/trainer/trainees': typeof TrainerTraineesRoute
 }
@@ -309,6 +327,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/member/assigned-workouts': typeof MemberAssignedWorkoutsRoute
   '/member/dashboard': typeof MemberDashboardRoute
+  '/member/payments': typeof MemberPaymentsRoute
   '/trainer/assign-work': typeof TrainerAssignWorkRoute
   '/trainer/trainees': typeof TrainerTraineesRoute
 }
@@ -328,6 +347,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/member/assigned-workouts'
     | '/member/dashboard'
+    | '/member/payments'
     | '/trainer/assign-work'
     | '/trainer/trainees'
   fileRoutesByTo: FileRoutesByTo
@@ -344,6 +364,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/member/assigned-workouts'
     | '/member/dashboard'
+    | '/member/payments'
     | '/trainer/assign-work'
     | '/trainer/trainees'
   id:
@@ -360,6 +381,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/member/assigned-workouts'
     | '/member/dashboard'
+    | '/member/payments'
     | '/trainer/assign-work'
     | '/trainer/trainees'
   fileRoutesById: FileRoutesById
@@ -420,7 +442,8 @@ export const routeTree = rootRoute
       "filePath": "member.tsx",
       "children": [
         "/member/assigned-workouts",
-        "/member/dashboard"
+        "/member/dashboard",
+        "/member/payments"
       ]
     },
     "/signup": {
@@ -455,6 +478,10 @@ export const routeTree = rootRoute
     },
     "/member/dashboard": {
       "filePath": "member/dashboard.tsx",
+      "parent": "/member"
+    },
+    "/member/payments": {
+      "filePath": "member/payments.tsx",
       "parent": "/member"
     },
     "/trainer/assign-work": {

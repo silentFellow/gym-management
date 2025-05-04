@@ -18,3 +18,24 @@ export const extendMembership = async ({
   })
   return response.data
 }
+
+export const createRazorpayOrder = async (amount: number) => {
+  const res = await API.post('/payments/create-order', { amount })
+  return res.data
+}
+
+export const verifyRazorpayPayment = async (payload: {
+  razorpay_order_id: string
+  razorpay_payment_id: string
+  razorpay_signature: string
+  userId: string
+  periodInDays: number
+}) => {
+  const res = await API.post('/payments/verify', payload)
+  return res.data
+}
+
+export const getMembershipStatus = async (userId: string) => {
+  const res = await API.get(`/users/${userId}`)
+  return res.data
+}

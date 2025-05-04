@@ -94,6 +94,19 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+export const getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).lean();
+
+    res.status(200).json({ ...user, id: user._id.toString(), _id: undefined });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching users", error: error.message });
+  }
+};
+
 // Remove a user
 export const removeUser = async (req, res) => {
   try {

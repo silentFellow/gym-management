@@ -11,6 +11,11 @@ export const getAllUsers = async (): Promise<Array<User>> => {
   return response.data
 }
 
+export const getUser = async (user_id: string): Promise<User> => {
+  const response = await API.get(`/users/${user_id}`)
+  return response.data
+}
+
 export const removeUser = async (id: string): Promise<void> => {
   await API.delete(`/users/${id}`)
 }

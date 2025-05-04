@@ -3,6 +3,7 @@ import {
   registerUser,
   loginUser,
   refreshAccessToken,
+  getUser,
   getAllUsers,
   removeUser,
   updateUserRole,
@@ -12,6 +13,7 @@ import {
 const router = express.Router();
 
 router.get("/", getAllUsers);
+router.get("/:id", getUser);
 router.get("/eligible-members", getEligibleUsers);
 router.post("/create", registerUser);
 router.post("/login", loginUser);
