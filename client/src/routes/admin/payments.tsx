@@ -73,7 +73,10 @@ const AdminPayments = () => {
               <tr key={user._id} className="border-b">
                 <td className="py-3 px-4">{user.username}</td>
                 <td className="py-3 px-4">
-                  {user.hasPaid ? 'Paid' : 'Unpaid'}
+                  {user.membershipExpiresAt &&
+                  new Date(user.membershipExpiresAt) > new Date()
+                    ? 'Paid'
+                    : 'Unpaid'}
                 </td>
                 <td className="py-3 px-4">
                   {user.membershipExpiresAt
