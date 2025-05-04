@@ -13,11 +13,13 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as TrainerImport } from './routes/trainer'
 import { Route as SignupImport } from './routes/signup'
+import { Route as MemberImport } from './routes/member'
 import { Route as LoginImport } from './routes/login'
 import { Route as AdminImport } from './routes/admin'
 import { Route as IndexImport } from './routes/index'
 import { Route as TrainerTraineesImport } from './routes/trainer/trainees'
 import { Route as TrainerAssignWorkImport } from './routes/trainer/assign-work'
+import { Route as MemberDashboardImport } from './routes/member/dashboard'
 import { Route as AdminUsersImport } from './routes/admin/users'
 import { Route as AdminTrainersImport } from './routes/admin/trainers'
 import { Route as AdminPaymentsImport } from './routes/admin/payments'
@@ -34,6 +36,12 @@ const TrainerRoute = TrainerImport.update({
 const SignupRoute = SignupImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MemberRoute = MemberImport.update({
+  id: '/member',
+  path: '/member',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -65,6 +73,12 @@ const TrainerAssignWorkRoute = TrainerAssignWorkImport.update({
   id: '/assign-work',
   path: '/assign-work',
   getParentRoute: () => TrainerRoute,
+} as any)
+
+const MemberDashboardRoute = MemberDashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => MemberRoute,
 } as any)
 
 const AdminUsersRoute = AdminUsersImport.update({
@@ -116,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/member': {
+      id: '/member'
+      path: '/member'
+      fullPath: '/member'
+      preLoaderRoute: typeof MemberImport
+      parentRoute: typeof rootRoute
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -158,6 +179,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersImport
       parentRoute: typeof AdminImport
     }
+    '/member/dashboard': {
+      id: '/member/dashboard'
+      path: '/dashboard'
+      fullPath: '/member/dashboard'
+      preLoaderRoute: typeof MemberDashboardImport
+      parentRoute: typeof MemberImport
+    }
     '/trainer/assign-work': {
       id: '/trainer/assign-work'
       path: '/assign-work'
@@ -193,6 +221,17 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface MemberRouteChildren {
+  MemberDashboardRoute: typeof MemberDashboardRoute
+}
+
+const MemberRouteChildren: MemberRouteChildren = {
+  MemberDashboardRoute: MemberDashboardRoute,
+}
+
+const MemberRouteWithChildren =
+  MemberRoute._addFileChildren(MemberRouteChildren)
+
 interface TrainerRouteChildren {
   TrainerAssignWorkRoute: typeof TrainerAssignWorkRoute
   TrainerTraineesRoute: typeof TrainerTraineesRoute
@@ -210,12 +249,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/member': typeof MemberRouteWithChildren
   '/signup': typeof SignupRoute
   '/trainer': typeof TrainerRouteWithChildren
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/trainers': typeof AdminTrainersRoute
   '/admin/users': typeof AdminUsersRoute
+  '/member/dashboard': typeof MemberDashboardRoute
   '/trainer/assign-work': typeof TrainerAssignWorkRoute
   '/trainer/trainees': typeof TrainerTraineesRoute
 }
@@ -224,12 +265,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/member': typeof MemberRouteWithChildren
   '/signup': typeof SignupRoute
   '/trainer': typeof TrainerRouteWithChildren
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/trainers': typeof AdminTrainersRoute
   '/admin/users': typeof AdminUsersRoute
+  '/member/dashboard': typeof MemberDashboardRoute
   '/trainer/assign-work': typeof TrainerAssignWorkRoute
   '/trainer/trainees': typeof TrainerTraineesRoute
 }
@@ -239,12 +282,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/member': typeof MemberRouteWithChildren
   '/signup': typeof SignupRoute
   '/trainer': typeof TrainerRouteWithChildren
   '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/trainers': typeof AdminTrainersRoute
   '/admin/users': typeof AdminUsersRoute
+  '/member/dashboard': typeof MemberDashboardRoute
   '/trainer/assign-work': typeof TrainerAssignWorkRoute
   '/trainer/trainees': typeof TrainerTraineesRoute
 }
@@ -255,12 +300,14 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/member'
     | '/signup'
     | '/trainer'
     | '/admin/attendance'
     | '/admin/payments'
     | '/admin/trainers'
     | '/admin/users'
+    | '/member/dashboard'
     | '/trainer/assign-work'
     | '/trainer/trainees'
   fileRoutesByTo: FileRoutesByTo
@@ -268,12 +315,14 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/member'
     | '/signup'
     | '/trainer'
     | '/admin/attendance'
     | '/admin/payments'
     | '/admin/trainers'
     | '/admin/users'
+    | '/member/dashboard'
     | '/trainer/assign-work'
     | '/trainer/trainees'
   id:
@@ -281,12 +330,14 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/member'
     | '/signup'
     | '/trainer'
     | '/admin/attendance'
     | '/admin/payments'
     | '/admin/trainers'
     | '/admin/users'
+    | '/member/dashboard'
     | '/trainer/assign-work'
     | '/trainer/trainees'
   fileRoutesById: FileRoutesById
@@ -296,6 +347,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
+  MemberRoute: typeof MemberRouteWithChildren
   SignupRoute: typeof SignupRoute
   TrainerRoute: typeof TrainerRouteWithChildren
 }
@@ -304,6 +356,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
+  MemberRoute: MemberRouteWithChildren,
   SignupRoute: SignupRoute,
   TrainerRoute: TrainerRouteWithChildren,
 }
@@ -321,6 +374,7 @@ export const routeTree = rootRoute
         "/",
         "/admin",
         "/login",
+        "/member",
         "/signup",
         "/trainer"
       ]
@@ -339,6 +393,12 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/member": {
+      "filePath": "member.tsx",
+      "children": [
+        "/member/dashboard"
+      ]
     },
     "/signup": {
       "filePath": "signup.tsx"
@@ -365,6 +425,10 @@ export const routeTree = rootRoute
     "/admin/users": {
       "filePath": "admin/users.tsx",
       "parent": "/admin"
+    },
+    "/member/dashboard": {
+      "filePath": "member/dashboard.tsx",
+      "parent": "/member"
     },
     "/trainer/assign-work": {
       "filePath": "trainer/assign-work.tsx",
