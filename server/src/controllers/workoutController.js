@@ -33,23 +33,29 @@ export const getTrainerWorkouts = async (req, res) => {
   res.json(workouts);
 };
 
-export const markWorkoutCompleted = async (req, res) => {
-  const { userId, workoutId } = req.body;
-
-  const workout = await Workout.findById(workoutId);
-  if (!workout) return res.status(404).json({ message: "Workout not found" });
-
-  if (!workout.completedBy.includes(userId)) {
-    workout.completedBy.push(userId);
-    await workout.save();
+export const getAssignedWorkouts = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const workouts = await Workout.find({ assignedTrainees: userId });
+    res.json(workouts);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch workouts" });
   }
-
-  res.json({ message: "Marked as completed" });
 };
 
-export const getUserAssignedWorkouts = async (req, res) => {
-  const { userId } = req.query;
+export const markWorkoutCompleted = async (req, res) => {
+  try {
+    const { workoutId, userId } = req.body;
+    const workout = await Workout.findById(workoutId);
+    if (!workout) return res.status(404).json({ error: "Workout not found" });
 
-  const workouts = await Workout.find({ assignedTrainees: userId });
-  res.json(workouts);
+    if (!workout.completedBy.includes(userId)) {
+      workout.completedBy.push(userId);
+      await workout.save();
+    }
+
+    res.json({ message: "Workout marked as completed" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update workout status" });
+  }
 };
