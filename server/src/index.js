@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import trainerRoutes from "./routes/trainerRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
+import workoutRoutes from "./routes/workoutRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -19,6 +20,7 @@ app.use("/users", userRoutes);
 app.use("/trainers", trainerRoutes);
 app.use("/payments", paymentRoutes);
 app.use("/attendance", attendanceRoutes);
+app.use("/workouts", workoutRoutes);
 
 app.get("/", (req, res) => res.send("Gym Management API Running"));
 

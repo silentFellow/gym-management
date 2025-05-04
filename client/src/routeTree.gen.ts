@@ -17,6 +17,7 @@ import { Route as LoginImport } from './routes/login'
 import { Route as AdminImport } from './routes/admin'
 import { Route as IndexImport } from './routes/index'
 import { Route as TrainerTraineesImport } from './routes/trainer/trainees'
+import { Route as TrainerAssignWorkImport } from './routes/trainer/assign-work'
 import { Route as AdminUsersImport } from './routes/admin/users'
 import { Route as AdminTrainersImport } from './routes/admin/trainers'
 import { Route as AdminPaymentsImport } from './routes/admin/payments'
@@ -57,6 +58,12 @@ const IndexRoute = IndexImport.update({
 const TrainerTraineesRoute = TrainerTraineesImport.update({
   id: '/trainees',
   path: '/trainees',
+  getParentRoute: () => TrainerRoute,
+} as any)
+
+const TrainerAssignWorkRoute = TrainerAssignWorkImport.update({
+  id: '/assign-work',
+  path: '/assign-work',
   getParentRoute: () => TrainerRoute,
 } as any)
 
@@ -151,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersImport
       parentRoute: typeof AdminImport
     }
+    '/trainer/assign-work': {
+      id: '/trainer/assign-work'
+      path: '/assign-work'
+      fullPath: '/trainer/assign-work'
+      preLoaderRoute: typeof TrainerAssignWorkImport
+      parentRoute: typeof TrainerImport
+    }
     '/trainer/trainees': {
       id: '/trainer/trainees'
       path: '/trainees'
@@ -180,10 +194,12 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface TrainerRouteChildren {
+  TrainerAssignWorkRoute: typeof TrainerAssignWorkRoute
   TrainerTraineesRoute: typeof TrainerTraineesRoute
 }
 
 const TrainerRouteChildren: TrainerRouteChildren = {
+  TrainerAssignWorkRoute: TrainerAssignWorkRoute,
   TrainerTraineesRoute: TrainerTraineesRoute,
 }
 
@@ -200,6 +216,7 @@ export interface FileRoutesByFullPath {
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/trainers': typeof AdminTrainersRoute
   '/admin/users': typeof AdminUsersRoute
+  '/trainer/assign-work': typeof TrainerAssignWorkRoute
   '/trainer/trainees': typeof TrainerTraineesRoute
 }
 
@@ -213,6 +230,7 @@ export interface FileRoutesByTo {
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/trainers': typeof AdminTrainersRoute
   '/admin/users': typeof AdminUsersRoute
+  '/trainer/assign-work': typeof TrainerAssignWorkRoute
   '/trainer/trainees': typeof TrainerTraineesRoute
 }
 
@@ -227,6 +245,7 @@ export interface FileRoutesById {
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/trainers': typeof AdminTrainersRoute
   '/admin/users': typeof AdminUsersRoute
+  '/trainer/assign-work': typeof TrainerAssignWorkRoute
   '/trainer/trainees': typeof TrainerTraineesRoute
 }
 
@@ -242,6 +261,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/trainers'
     | '/admin/users'
+    | '/trainer/assign-work'
     | '/trainer/trainees'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -254,6 +274,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/trainers'
     | '/admin/users'
+    | '/trainer/assign-work'
     | '/trainer/trainees'
   id:
     | '__root__'
@@ -266,6 +287,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/trainers'
     | '/admin/users'
+    | '/trainer/assign-work'
     | '/trainer/trainees'
   fileRoutesById: FileRoutesById
 }
@@ -324,6 +346,7 @@ export const routeTree = rootRoute
     "/trainer": {
       "filePath": "trainer.tsx",
       "children": [
+        "/trainer/assign-work",
         "/trainer/trainees"
       ]
     },
@@ -342,6 +365,10 @@ export const routeTree = rootRoute
     "/admin/users": {
       "filePath": "admin/users.tsx",
       "parent": "/admin"
+    },
+    "/trainer/assign-work": {
+      "filePath": "trainer/assign-work.tsx",
+      "parent": "/trainer"
     },
     "/trainer/trainees": {
       "filePath": "trainer/trainees.tsx",
