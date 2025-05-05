@@ -155,10 +155,18 @@ export const updateUserRole = async (req, res) => {
 };
 
 export const getEligibleUsers = async (req, res) => {
-  const today = new Date();
-  const users = await User.find({
-    role: "member",
-    membershipExpiresAt: { $gt: today },
-  }).select("_id username role membershipExpiresAt");
-  res.json(users);
+  try {
+    const today = new Date();
+    const users = await User.find({
+      role: "member",
+      membershipExpiresAt: { $gt: today },
+    }).select("_id username role membershipExpiresAt");
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching eligible users:", error);
+    res
+      .status(500)
+      .json({ message: "Error fetching eligible users", error: error.message });
+  }
 };

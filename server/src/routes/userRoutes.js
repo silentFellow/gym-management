@@ -13,8 +13,8 @@ import {
 const router = express.Router();
 
 router.get("/", getAllUsers);
-router.get("/:id", getUser);
 router.get("/eligible-members", getEligibleUsers);
+router.get("/:id", getUser);
 router.post("/create", registerUser);
 router.post("/login", loginUser);
 router.post("/refresh", refreshAccessToken);

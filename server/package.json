@@ -6,6 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "db_seed": "node src/scripts/db_seed.js",
+    "db_clean": "node src/scripts/db_clean.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
