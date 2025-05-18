@@ -11,6 +11,12 @@ export const Route = createFileRoute('/')({
         },
       })
     }
+
+    if (await isAuthenticated()) {
+      console.log('entered')
+      const role = localStorage.getItem('role') as string
+      throw redirect({ to: `/${role}` })
+    }
   },
   component: App,
 })
