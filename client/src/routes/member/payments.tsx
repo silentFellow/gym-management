@@ -51,7 +51,7 @@ function MemberPaymentsPage() {
         amount: data.amount,
         currency: data.currency,
         order_id: data.id,
-        name: 'GymX Membership',
+        name: 'Samson Gym Membership',
         description: selected.label,
         handler: async function (response: any) {
           await API.post('/payments/verify', {

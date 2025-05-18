@@ -46,7 +46,7 @@ const LoginRoute = () => {
       <Card className="backdrop-blur-xl bg-white/5 border border-white/10 shadow-xl w-full max-w-lg transition-transform duration-300 ease-out hover:scale-[1.02]">
         <CardHeader className="text-center space-y-2">
           <CardTitle className="text-white text-3xl font-extrabold">
-            Welcome Back to GymX
+            Welcome Back to Samson Gym
           </CardTitle>
           <p className="text-sm text-gray-300 font-light">
             Track your strength. Own your goals.

@@ -8,16 +8,13 @@ const TrainerSidebar = () => {
   const navigate = useNavigate()
   const matchRoute = useMatchRoute()
 
-  const isActive = (path: string) => matchRoute({ to: path })
-
-  const trainerLinks = [
-    ['/trainer/trainees', 'My Trainees'],
-    ['/trainer/assign-work', 'Assign Workouts'],
-  ]
+  const isActive = (path: string) => {
+    return matchRoute({ to: path })
+  }
 
   return (
     <>
-      {/* Topbar for sm devices */}
+      {/* Topbar for small screens */}
       <div className="md:hidden fixed top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded shadow-lg">
         <button onClick={() => setIsOpen(true)} className="text-2xl">
           <FaBars />
@@ -26,10 +23,15 @@ const TrainerSidebar = () => {
 
       {/* Sidebar for md+ */}
       <div className="hidden md:flex flex-col w-64 bg-gray-800 text-white p-5 h-screen">
-        <h2 className="text-2xl font-bold text-center mb-6">Trainer Panel</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">
+          Samson Gym Trainer
+        </h2>
         <div className="flex-1 overflow-y-auto">
           <ul className="space-y-4">
-            {trainerLinks.map(([path, label]) => (
+            {[
+              ['/trainer/trainees', 'My Trainees'],
+              ['/trainer/assign-work', 'Assign Workouts'],
+            ].map(([path, label]) => (
               <li key={path}>
                 <Link
                   to={path}
@@ -63,14 +65,17 @@ const TrainerSidebar = () => {
           />
           <div className="fixed top-0 left-0 w-64 h-full bg-gray-800 text-white p-5 z-50 shadow-lg flex flex-col">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold">Trainer Panel</h2>
+              <h2 className="text-xl font-bold">Samson Gym Admin</h2>
               <button onClick={() => setIsOpen(false)} className="text-2xl">
                 <FaTimes />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto">
               <ul className="space-y-4">
-                {trainerLinks.map(([path, label]) => (
+                {[
+                  ['/trainer/trainees', 'My Trainees'],
+                  ['/trainer/assign-work', 'Assign Workouts'],
+                ].map(([path, label]) => (
                   <li key={path}>
                     <Link
                       to={path}
