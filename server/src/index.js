@@ -17,6 +17,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/check-health", async (req, res) => {
+  res.status(200).send({ "status": "ok" })
+})
+
 app.use("/users", userRoutes);
 app.use("/trainers", trainerRoutes);
 app.use("/payments", paymentRoutes);
